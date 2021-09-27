@@ -1,0 +1,26 @@
+<div class="row" *ngIf="mode == 'my'">
+    <div class="col-xs-12">
+        <button class="btn btn-success" (click)="onNewRecipe()">New Recipe</button>
+    </div>
+</div>
+<hr>
+<!-- <app-search></app-search> -->
+<form>
+    <mat-form-field >
+      <mat-label>Search Recipe</mat-label>
+      <input matInput placeholder="Ex. Pizza" name="search" type="search" [(ngModel)]="searchText">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+ </form>
+
+ <!-- <ul *ngFor="let tempRecipe of recipes | filter: searchText">
+    <li>{{tempRecipe.name}}</li>
+  </ul> -->
+
+<div class="row">
+    <div class="col-xs-12">
+        <app-recipe-item *ngFor="let tempRecipe of recipes | filter: searchText"
+                         [recipe]="tempRecipe"
+                         ></app-recipe-item>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="container">
+        <div class="row" style="text-align: center;">
+            <div class="col-md-12">
+            <div class="col-md-11">
+                <h3>{{ message }}</h3>
+                <h4 *ngIf="error && error.includes('e-mail is already in use') else elseBlock">
+                    <i style="color: red;">* {{error}} &nbsp;</i><a href="/oauth2/authorization/google">Login with Google</a>
+                </h4>
+                <ng-template #elseBlock>
+                    <h4 *ngIf="error"><i style="color: red;">* {{error}}</i></h4>
+                </ng-template>
+            </div>
+            <div class="col-md-1">
+                    <button mat-button mat-dialog-close >
+                        <mat-icon aria-hidden="false" aria-label="Example home icon" >close</mat-icon>
+                    </button>
+            </div>
+        </div>
+        </div>
+        <hr>
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+                    <div class="form-group" *ngIf="!isLogin">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-control" name="name" ngModel required #name="ngModel">
+                        <span class="help-block" *ngIf="!name.valid && name.touched">
+                            <span *ngIf="name.errors['required']">Name is required!</span>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-Mail</label>
+                        <input type="text" id="email" class="form-control" name="email" ngModel email required 
+                            #email="ngModel">
+                        <span class="help-block" *ngIf="!email.valid && email.touched">
+                            <span *ngIf="email.errors['required']">Email is required!</span>
+                            <span *ngIf="email.errors['email']">Please enter valid email!</span>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" name="password" 
+                        ngModel required minlength="1" 
+                        placeholder="*only numbers and Latin letters"
+                        #password="ngModel">
+                        <span class="help-block" *ngIf="!password.valid && password.touched">
+                            <span *ngIf="password.errors['required']">Password is required!</span>
+                            <span *ngIf="password.errors['minlength']">Password must be at least 6 characers!</span>
+                        </span>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" type="submit" [disabled]="!f.valid" style="margin-right: 5px;">
+                            {{ isLogin ? 'Login' : 'Sign Up' }} 
+                        </button>
+                        <button class="btn btn-primary" type="button" (click)="onSwitchMode()">
+                            Switch to  {{ isLogin ? 'Sign Up' : 'Login' }} 
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5" style="margin-bottom: 10px;">
+            </div>
+            <div class="col-md-8" style="margin-bottom: 30px;">
+                <a href="/oauth2/authorization/google">Login with Google</a><br>
+                <a href="/oauth2/authorization/facebook">Login with Facebook</a>
+            </div>
+        </div>
+    </div>
+</div>
+

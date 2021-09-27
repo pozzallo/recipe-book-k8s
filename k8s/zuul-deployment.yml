@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zuul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: zuul
+  template:
+    metadata:
+      labels:
+        component: zuul
+    spec:
+      containers:
+        - name: zuul
+          image: pozzallo/zuul:env
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9000
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: redis.host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: redis.port
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: spring.datasource.url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: mysql.user
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: varia123
+            - name: RESOURCE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: resource.host
+            - name: RESOURCE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: resource.port

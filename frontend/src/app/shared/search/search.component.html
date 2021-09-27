@@ -1,0 +1,7 @@
+<form>
+    <mat-form-field >
+      <mat-label>Search Recipe</mat-label>
+      <input matInput placeholder="Ex. Pizza" name="search" type="search" [(ngModel)]="searchText" (keyup)="onKey($event)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+ </form>

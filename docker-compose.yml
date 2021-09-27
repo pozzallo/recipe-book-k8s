@@ -1,0 +1,49 @@
+version: '3'
+services:
+    db:
+        image: 'mysql'
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: f2e77329
+            MYSQL_DATABASE: recipe-book
+            MYSQL_USER: varia
+            MYSQL_PASSWORD: varia123
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+            - ./mysql/schema:/docker-entrypoint-initdb.d/
+    redis:
+        image: 'redis'
+    resource:
+        depends_on:
+            - db
+        build: ./recipe-book
+        ports:
+            - "8080:8080"
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/recipe-book?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+            SPRING_DATASOURCE_USERNAME: varia
+            SPRING_DATASOURCE_PASSWORD: varia123
+            SPRING_REDIS_HOST: redis
+            SPRING_REDIS_PORT: 6379
+    zuul:
+        depends_on:
+            - db
+            - redis
+        build: ./recipe-book-ui
+        ports:
+            - "9000:9000"
+        environment: 
+            SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/recipe-book?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+            SPRING_DATASOURCE_USERNAME: varia
+            SPRING_DATASOURCE_PASSWORD: varia123
+            SPRING_REDIS_HOST: redis
+            SPRING_REDIS_PORT: 6379
+            ZUUL_ROUTES_RESOURCE_URL: http://resource:8080
+    frontend:
+        depends_on: 
+            - zuul
+        build: ./frontend
+        ports: 
+            - "80:80"
+

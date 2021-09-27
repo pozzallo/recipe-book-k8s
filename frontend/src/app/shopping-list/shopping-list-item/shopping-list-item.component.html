@@ -1,0 +1,38 @@
+       <div *ngIf="!isShowSummary">
+       <div *ngFor="let item of sortedItemsDetails; let i = index">
+           <h4 *ngIf="item.name != 'null'; else noRecipe">{{item.name}}:</h4>
+           <ng-template #noRecipe><h4>No Recipe:</h4></ng-template> 
+           <ul  class="list-group">
+            <li  *ngFor="let detail of item.items">
+                <a class="list-group-item"
+                style="cursor: pointer;"
+                (click)="onEditItem(detail)"
+                > {{ detail.name }} - {{detail.amount}}
+                </a></li>
+           </ul>
+       </div>
+    </div>
+
+    <div *ngIf="isShowSummary">
+       <ul  class="list-group">
+            <li class="dropdown" appDropdown  *ngFor="let item of sortedItemsSummary; let i = index">
+                <a style="cursor: pointer;" class="dropdown-toggle list-group-item" role="button">
+                    {{ item.name }} - {{ item.calculateTotal() }} <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li  *ngFor="let detail of item.items">
+                        <a 
+                        style="cursor: pointer;"
+                        (click)="onEditItem(detail)"
+                        > {{ detail.amount }} <i *ngIf="detail.recipeName"> (from {{ detail.recipeName }})</i>
+                        </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+        <hr>
+        <button type="button"
+         class="btn btn-primary" 
+         style="margin-right: 3px;" 
+         (click)="showSummary()">{{ isShowSummary ? 'Show details' : 'Show summary'}}</button>
+         <button class="btn btn-danger" (click)="onClearShoppingList()">Clear Shopping list</button> 

@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-xs-10">
+        <app-shopping-edit></app-shopping-edit>
+        <hr>
+        <div class="navbar-default">
+            <ul class="nav navbar-nav">
+                <li routerLinkActive="active" ><a [routerLink]="['items']">Shopping list items</a></li>
+                <li routerLinkActive="active"><a [routerLink]="['recipes']">Selected Recipes</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-10">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+     
+
+
+
+      

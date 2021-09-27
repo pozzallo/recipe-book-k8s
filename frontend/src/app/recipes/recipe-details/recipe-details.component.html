@@ -1,0 +1,45 @@
+<app-loading-spiner *ngIf="!recipeLoaded"></app-loading-spiner>
+
+<div  *ngIf="recipeLoaded">
+    <div class="row">
+        <div class="col-xs-12">
+            <img [src]="recipe.imageUrl" alt="{{ recipe.name }}" class="img-responsive" style="max-height: 300px;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>{{ recipe.name }}</h1>
+        </div>
+    </div>
+    <div class="row" *ngIf="currentUser">
+        <div class="col-xs-12">
+            <div class="btn-group" appDropdown>
+                <button class="btn btn-primary dropdown-toggle">
+                    Manage Recipe <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a (click)="onAddToShoppingList()" *ngIf="!isAdmin">To Shopping List</a></li>
+                    <li><a (click)="onApproveRecipe()" *ngIf="isAdmin">Approve Recipe</a></li>
+                    <li><a (click)="onAddToMyRecipe()"  *ngIf="mode == 'all'">Add to My Recipes</a></li>
+                    <li><a [routerLink]="['edit']" *ngIf="isAdmin || mode == 'my'">Edit Recipe</a></li>
+                    <li><a (click)="onDelete()" *ngIf="isAdmin || mode == 'my'">Delete Recipe</a></li>
+                    <li><a (click)="onShare()" *ngIf="mode == 'my'">Share Recipe</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{recipe.description}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let ingredient of recipe.ingredients">
+                    {{ ingredient.name }} - {{ ingredient.amount }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <nav class="nav navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a href="#" class="navbar-brand">Recipe Book</a>
+                    </div>
+
+                    <div class="navbar-default">
+                        <ul class="nav navbar-nav">
+                            <li routerLinkActive="active"><a routerLink="/recipes/all">Recipes</a></li>
+                            <li routerLinkActive="active"><a routerLink="/recipes/my" *ngIf="currentUser">My Recipes</a></li>
+                            <li routerLinkActive="active"><a routerLink="/shopping-list" *ngIf="currentUser">Shopping List</a></li>
+                            <li routerLinkActive="active"><a routerLink="/recipes/pending" *ngIf="currentUser && currentUser.isAdmin()">Pending to approve</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-info" (click)="login()" *ngIf="!currentUser">Login</button>
+        </div>
+        <div class="col-md-4" *ngIf="currentUser">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+                {{ currentUser.name }}
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="logout()">Logout</button>
+                <button mat-menu-item (click)="changePassword()">Change password</button>
+            </mat-menu>
+        </div>
+    </div>
+</div>
