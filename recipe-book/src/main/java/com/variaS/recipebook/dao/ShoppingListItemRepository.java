@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.variaS.recipebook.entity.ShoppingListItem;
 
-@CrossOrigin("http://localhost:9000")
+@CrossOrigin
 public interface ShoppingListItemRepository extends JpaRepository<ShoppingListItem, Integer>{
 	
 	List<ShoppingListItem> findByRecipeName(@Param("recipeName")String recipeName );

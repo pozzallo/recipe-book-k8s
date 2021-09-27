@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.variaS.recipebook.entity.Ingredient;
 
-@CrossOrigin("http://localhost:9000")
+@CrossOrigin
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer>{
 	
 	List<Ingredient> findByRecipeId(@Param("id") int id);
