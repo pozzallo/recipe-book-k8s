@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: zuul
-          image: pozzallo/zuul:env
+          image: pozzallo/zuul
           imagePullPolicy: Always
           ports:
             - containerPort: 9000

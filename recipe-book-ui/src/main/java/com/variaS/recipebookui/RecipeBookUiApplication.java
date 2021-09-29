@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
-@Controller
 @EnableZuulProxy
-@CrossOrigin
 public class RecipeBookUiApplication extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -56,11 +54,6 @@ public class RecipeBookUiApplication extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RecipeBookUiApplication.class, args);
-	}
-
-	@GetMapping("/")
-	public String home() {
-		return "index.html";
 	}
 
 	// for monitoring with spring-actuator

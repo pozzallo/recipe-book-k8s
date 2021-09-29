@@ -6,7 +6,6 @@ COPY src/main/resources /home/app/src/main/resources
 COPY src /home/app/src
 RUN mvn -f /home/app/pom.xml clean package -Dmaven.test.skip
 
-#
 # Package stage
 #
 FROM openjdk:8-jre-slim
