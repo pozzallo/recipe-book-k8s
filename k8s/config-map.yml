@@ -6,7 +6,6 @@ data:
   redis.host: redis-service
   redis.port: '6379'
   spring.datasource.url: jdbc:mysql://db:3306/recipe-book?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
-  mysql.user: varia
   mysql.database: recipe-book
   resource.host: resource
   resource.port: '8080'

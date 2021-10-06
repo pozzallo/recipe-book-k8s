@@ -19,11 +19,6 @@ spec:
         - name: mysql-initdb
           configMap:
             name: mysql-initdb-config
-        - name: tz-config
-          hostPath:
-            path: /etc/localtime
-            type: File
-        
       containers:
         - name: mysql
           image: mysql
@@ -34,11 +29,12 @@ spec:
               mountPath: /var/lib/mysql
             - name: mysql-initdb
               mountPath: /docker-entrypoint-initdb.d
-            - name: tz-config
-              mountPath: /usr/share/zoneinfo/Europe/Moscow
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: f2e77329
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: root_password
             - name: MYSQL_DATABASE
               valueFrom:
                 configMapKeyRef:
@@ -46,11 +42,14 @@ spec:
                   key: mysql.database
             - name: MYSQL_USER
               valueFrom:
-                configMapKeyRef:
-                  name: app-config
-                  key: mysql.user
+                secretKeyRef:
+                  name: mysql-secret
+                  key: username
             - name: MYSQL_PASSWORD
-              value: varia123
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
 
 
           

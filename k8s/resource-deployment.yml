@@ -35,8 +35,11 @@ spec:
                   key: spring.datasource.url
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
-                configMapKeyRef:
-                  name: app-config
-                  key: mysql.user
+                secretKeyRef:
+                  name: mysql-secret
+                  key: username
             - name: SPRING_DATASOURCE_PASSWORD
-              value: varia123
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
