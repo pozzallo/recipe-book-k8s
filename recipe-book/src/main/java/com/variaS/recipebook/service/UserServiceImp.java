@@ -99,16 +99,6 @@ public class UserServiceImp implements UserService {
 			// if not exists register new user account
 			currentUser = registerNewOauthUserAccount(principal);
 		}
-//		if (clientRegistrationId.equals("facebook")) {
-//			String facebookId = (String) principal.getAttribute("id");
-//			currentUser = getFacebokUser(facebookId);
-//		}else if(clientRegistrationId.equals("google")) {
-//			String googleSub = (String) principal.getAttribute("sub");
-//			currentUser = getGoogleUser(googleSub);
-//		}
-//		if(currentUser == null) {
-//			currentUser = registerNewOauthUserAccount(principal);
-//		}
 		return currentUser;
 	}
 
@@ -146,9 +136,6 @@ public class UserServiceImp implements UserService {
 
 	public User registerNewOauthUserAccount(OAuth2User principal) {
 		String email = (String) principal.getAttribute("email");
-//		if (isEmailExist(email)) {
-//			throw new IllegalArgumentException("Such E-mail already exists!");
-//		}
 		String name = (String) principal.getAttribute("name");
 		String googleSub = (String) principal.getAttribute("sub");
 		String facebookId = (String) principal.getAttribute("id");
@@ -156,6 +143,7 @@ public class UserServiceImp implements UserService {
 		newUser.setFacebookId(facebookId);
 		List<Authority> roleUser = authRepo.findByName("ROLE_USER");
 		newUser.setAuthorities(roleUser);
+		newUser.setEnabled(1);
 		newUser = userRepo.save(newUser);
 		return newUser;
 	}
