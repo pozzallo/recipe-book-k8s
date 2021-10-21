@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.variaS.recipebook.entity.Authority;
 import com.variaS.recipebook.entity.Recipe;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public interface AuthorityRepository extends JpaRepository<Authority, Integer>{
 	
 	List<Authority> findByName(@Param("name") String name);

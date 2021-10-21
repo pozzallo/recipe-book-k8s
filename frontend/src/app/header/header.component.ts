@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LoginService } from '../login.service';
 import { User } from '../user.model';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 
@@ -26,8 +26,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   login(){
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      message: "Login to your account to manage recipes and shopping list."
+    };
     // open mat dialog
-    this.dialog.open(LoginComponent);
+    this.dialog.open(LoginComponent, dialogConfig);
   }
 
   logout(){

@@ -7,6 +7,7 @@ import { User } from './user.model';
   providedIn: 'root'
 })
 export class LoginService {
+
   currentUser = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) { }
@@ -14,11 +15,9 @@ export class LoginService {
   logout(){
     this.http.post('/logout', null).subscribe(
       resp => {
-        console.log('Logout responce');
         this.currentUser.next(null);
       },
       err => {
-        console.log('Logout error responce');
         this.currentUser.next(null);
       }
     )
@@ -27,12 +26,20 @@ export class LoginService {
   login(email: string, password: string){
     let headers = new HttpHeaders({authorization : 'Basic ' + btoa(email + ':' + password)});
     headers = headers.append("X-Requested-With", "XMLHttpRequest");
-   return this.http.get<string>('/basic', {headers: headers, withCredentials: true}) as Observable<string>;
+    return this.http.get<string>('/basic', {headers: headers, withCredentials: true}) as Observable<string>;
   }
 
   signup(name:string, email:string, password:string){
     let newUser = new User(null, name, email, null, password, null, null);
     return this.http.post('api/user', newUser) as Observable<User>;
+  }
+
+  sendResetPasswordToken(email:string) {
+    return this.http.post('api/user/sendResetPasswordToken', email);
+  }
+
+  resetPassword(newPassword: string, token: string){
+    return this.http.post('api/user/resetPassword', {'password': newPassword, 'token': token});
   }
 
 

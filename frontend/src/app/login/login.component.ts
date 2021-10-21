@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
 import { User } from '../user.model';
 import { MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,17 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  message = 'Login to your account to manage your recipe and shopping list.';
+  message: string;
   error: string;
   isLogin = true;
+  isResetPassword = false;
+  sendingEmail = false;
 
-  constructor(public dialogRef: MatDialogRef<LoginComponent>, private router: Router, private loginService: LoginService) { }
+  constructor(public dialogRef: MatDialogRef<LoginComponent>, private router: Router, private loginService: LoginService,
+               @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
+    this.message = this.data.message;
   }
   
   onSwitchMode() {
@@ -78,17 +83,44 @@ export class LoginComponent implements OnInit {
 
   onHandleError(err: any) {
     this.error = 'Unexpected server error occured! Please try again later.';
-    if (err['status'] && err.status == '409') {
-      this.error = 'Conflict! Such e-mail already exists!';
-    } else if (err['error'] && err.error['message']) {
+    if (err['status']) {
+      if(err.status == '409'){
+        this.error = 'Such e-mail already exists!';
+      } else if (err.status == '404'){
+        this.error = "No such e-mail. Please enter e-mail you used for registration";
+      }
+    }
+    if (err['error'] && err.error['message']) {
       let message: string = err.error.message.toLowerCase();
-      if (message.includes('bad credentials')) {
+      if (message.includes('bad credentials') || message.includes('cannot pass null or empty values to constructor')) {
         this.error = 'Invalid e-mail or password!';
       };
-      if (message.includes('cannot pass null or empty values to constructor')) {
-        this.error = 'This e-mail is already in use for ';
-      }
     };
+  }
+
+  onResetPassword(){
+    this.error = null;
+    this.message = null;
+    this.isResetPassword = true;
+  }
+
+  onSendResetPasswordLink(email:string){
+    this.sendingEmail = true;
+    this.loginService.sendResetPasswordToken(email).subscribe(
+      resp => {
+        this.sendingEmail = false;
+        console.log("Response from Send Link request: " + resp);
+        this.error = null;
+        this.message = "Reset password link was sent. Please check your email";
+      },
+      err => {
+        this.sendingEmail = false;
+        this.message = null;
+        console.log("Error from Send Link request: " + JSON.stringify(err));
+        this.onHandleError(err);
+      }
+    )
+    
   }
 
 }

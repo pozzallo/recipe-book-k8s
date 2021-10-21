@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.variaS.recipebook.entity.Recipe;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public interface RecipeRepository extends JpaRepository<Recipe, Integer>{
 	
 	List<Recipe> findByUserId(@Param("id") Integer id);

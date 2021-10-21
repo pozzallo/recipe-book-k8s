@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.variaS.recipebook.entity.User;
-
+@CrossOrigin(origins = "*")
 public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	List<User> findByGoogleSub(@Param("google_sub") String googleSub);

@@ -14,6 +14,7 @@ public interface UserService  {
 	public User registerNewBasicUserAccount(User newUser) throws IllegalArgumentException;
 
 	public void changePassword(String string);
-	
+
+	public void resetUserPassword(String string, int id);
 
 }

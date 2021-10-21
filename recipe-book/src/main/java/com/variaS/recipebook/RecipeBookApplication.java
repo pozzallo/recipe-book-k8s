@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,11 +30,12 @@ public class RecipeBookApplication extends WebSecurityConfigurerAdapter{
 	public PasswordEncoder encoder() {
 	    return new BCryptPasswordEncoder();
 	}
-
+	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests(a -> a
-                .antMatchers("/api/recipes", "/api/recipes/*", "/recipes/all/**", "api/user").permitAll()
+                .antMatchers("/api/recipes", "/api/recipes/*", "/recipes/all/**", "/api/user", 
+                			"/api/user/resetPassword", "/api/user/validateToken", "/api/user/sendResetPasswordToken").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user").anonymous()
                 .anyRequest().authenticated());
 	}

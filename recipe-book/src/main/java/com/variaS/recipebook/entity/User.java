@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,57 +22,56 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "users")
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "email")
 	private String email;
-	
+
 	@Column(name = "password")
 	private String password;
-	
+
 	@Column(name = "enabled")
 	private int enabled;
-	
+
 	@Column(name = "google_sub")
 	private String googleSub;
-	
+
 	@Column(name = "facebook_id")
 	private String facebookId;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	@JsonIgnore
 	private List<Recipe> recipes = new ArrayList<Recipe>();
-	
+
 	@ManyToMany
-	@JoinTable(
-	  name = "authorities", 
-	  joinColumns = @JoinColumn(name = "user_id"), 
-	  inverseJoinColumns = @JoinColumn(name = "authority"))
-	private Collection <Authority> authorities;
-	
-	public User() {}
-	
+	@JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority"))
+	private Collection<Authority> authorities;
+
+	@OneToOne(mappedBy = "user")
+	@JsonIgnore
+	private PasswordResetToken passwordResetToken;
+
+	public User() {
+	}
+
 	public User(String name, String email, String googleSub) {
 		this.name = name;
 		this.email = email;
 		this.googleSub = googleSub;
 	}
 
-	
 	public Collection<Authority> getAuthorities() {
 		return authorities;
 	}
 
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
-	}
+
 
 	public int getId() {
 		return id;
@@ -137,5 +137,18 @@ public class User {
 		this.facebookId = facebookId;
 	}
 
+	public PasswordResetToken getPasswordResetToken() {
+		return passwordResetToken;
+	}
 
+	public void setPasswordResetToken(PasswordResetToken passwordResetToken) {
+		this.passwordResetToken = passwordResetToken;
+	}
+
+	public void setAuthorities(Collection<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
+
+	
 }

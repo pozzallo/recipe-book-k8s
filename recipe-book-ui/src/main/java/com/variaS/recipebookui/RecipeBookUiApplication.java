@@ -16,9 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
@@ -45,11 +43,12 @@ public class RecipeBookUiApplication extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests(a -> a.antMatchers("/", "/error", "/*.js", "/*.css", "/*.ico", "/index.html",
-				"/api/recipes", "/api/recipes/*", "/recipes/all/**", "/api/user").permitAll()
+				"/api/recipes", "/api/recipes/*", "/recipes/all/**", "/reset-password", 
+				"/api/user", "/api/user/resetPassword", "/api/user/validateToken", "/api/user/sendResetPasswordToken").permitAll()
 				.anyRequest().authenticated())
 				.exceptionHandling(e -> e.authenticationEntryPoint(authenticationEntryPoint()))
 				.oauth2Login()
-				.successHandler(successHandler())
+//				.successHandler(successHandler())
 				.and().httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and().csrf()
 				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
 				.logout(l -> l.logoutSuccessUrl("/").permitAll());
@@ -58,16 +57,16 @@ public class RecipeBookUiApplication extends WebSecurityConfigurerAdapter {
 	public static void main(String[] args) {
 		SpringApplication.run(RecipeBookUiApplication.class, args);
 	}
-
-	@Bean
-    public SimpleUrlAuthenticationSuccessHandler successHandler() {
-        return new SimpleUrlAuthenticationSuccessHandler("http://localhost:31515");
-    }
-	
-	@Bean
-    public SimpleUrlAuthenticationFailureHandler failureHandler() {
-        return new SimpleUrlAuthenticationFailureHandler("http://localhost:31515");
-    }
+//
+//	@Bean
+//    public SimpleUrlAuthenticationSuccessHandler successHandler() {
+//        return new SimpleUrlAuthenticationSuccessHandler("http://localhost:31515");
+//    }
+//	
+//	@Bean
+//    public SimpleUrlAuthenticationFailureHandler failureHandler() {
+//        return new SimpleUrlAuthenticationFailureHandler("http://localhost:31515");
+//    }
 
 	// for monitoring with spring-actuator
 	@Bean
@@ -83,5 +82,10 @@ public class RecipeBookUiApplication extends WebSecurityConfigurerAdapter {
 	@Bean
 	public AuthenticationEntryPoint authenticationEntryPoint() {
 		return new BasicAuthenticationEntryPoint();
+	}
+	
+	@RequestMapping("/")
+	public String index() {
+		return "index.html";
 	}
 }

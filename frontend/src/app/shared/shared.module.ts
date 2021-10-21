@@ -9,7 +9,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import { FormsModule } from "@angular/forms";
 import { FilterPipe } from "./filter.pipe";
-import { TestPipe } from "./test.pipe";
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import {A11yModule} from '@angular/cdk/a11y';
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
@@ -25,7 +24,6 @@ import {MatMenuModule} from '@angular/material/menu';
         DropdownDirective,
         SearchComponent,
         FilterPipe,
-        TestPipe,
         ConfirmDialogComponent,
         InfoDialogComponent
     ],
@@ -47,7 +45,6 @@ import {MatMenuModule} from '@angular/material/menu';
         DropdownDirective,
         SearchComponent,
         FilterPipe,
-        TestPipe,
         ConfirmDialogComponent,
         InfoDialogComponent,
         MatDialogModule,

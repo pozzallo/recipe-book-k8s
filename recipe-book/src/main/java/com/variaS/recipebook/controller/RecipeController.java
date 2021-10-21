@@ -21,7 +21,7 @@ import com.variaS.recipebook.entity.User;
 import com.variaS.recipebook.service.RecipeService;
 import com.variaS.recipebook.service.UserService;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class RecipeController {

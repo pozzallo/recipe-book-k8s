@@ -18,10 +18,12 @@ import org.springframework.stereotype.Service;
 
 import com.variaS.recipebook.dao.AuthorityRepository;
 import com.variaS.recipebook.dao.IngredientRepository;
+import com.variaS.recipebook.dao.PasswordResetTokenRepository;
 import com.variaS.recipebook.dao.RecipeRepository;
 import com.variaS.recipebook.dao.UserRepository;
 import com.variaS.recipebook.entity.Authority;
 import com.variaS.recipebook.entity.Ingredient;
+import com.variaS.recipebook.entity.PasswordResetToken;
 import com.variaS.recipebook.entity.Recipe;
 import com.variaS.recipebook.entity.User;
 
@@ -34,10 +36,8 @@ public class UserServiceImp implements UserService {
 	private RecipeRepository recipeRepo;
 	@Autowired
 	private IngredientRepository ingredientRepo;
-
 	@Autowired
 	private AuthorityRepository authRepo;
-
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -175,6 +175,15 @@ public class UserServiceImp implements UserService {
 	private boolean isEmailExist(String email) {
 		List<User> findByEmail = userRepo.findByEmail(email);
 		return !findByEmail.isEmpty();		
+	}
+
+	@Override
+	@Transactional
+	public void resetUserPassword(String newPass, int id) {
+		User user = userRepo.findById(id).get();
+		user.setPassword(passwordEncoder.encode(newPass));
+		user.setEnabled(1);
+		userRepo.save(user);			
 	}
 
 }
