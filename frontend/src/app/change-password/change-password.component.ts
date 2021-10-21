@@ -25,11 +25,9 @@ export class ChangePasswordComponent implements OnInit {
       console.log(password + " " + rePassword);
       this.http.post('api/user/password', {'password': password}).subscribe(
         resp => {
-          // this.commonService.showInfo('Password was change successfully', '');
           this.message = 'Password was change successfully!';
         }
       )
-   
     } catch (error) {
       if (error['name'] && error.name == 'InvalidCharacterError') {
         this.error = 'The email or password contains an invalid character. Must contain only Latin letters and numbers!'

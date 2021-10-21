@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginService } from '../login.service';
+import { LoginService } from '../login/login.service';
 import { LoginComponent } from '../login/login.component';
 
 @Component({
@@ -21,18 +21,6 @@ export class ResetPasswordComponent implements OnInit {
     console.log("Token: " + this.token);
   }
 
-  onResetPassword(newPassword: string){
-    this.loginServise.resetPassword(newPassword, this.token).subscribe(
-      resp => {
-        let dialogConfig = new MatDialogConfig();
-        dialogConfig.data = {
-          message: "Login to your account using new password!"
-        };
-        this.dialog.open(LoginComponent, dialogConfig)
-      }
-    );
-  }
-
   onSubmit(form: NgForm) {
     const password = form.value.password;
     try {
@@ -45,7 +33,6 @@ export class ResetPasswordComponent implements OnInit {
           this.dialog.open(LoginComponent, dialogConfig)
         }
       );
-   
     } catch (error) {
       if (error['name'] && error.name == 'InvalidCharacterError') {
         this.error = 'The email or password contains an invalid character. Must contain only Latin letters and numbers!'

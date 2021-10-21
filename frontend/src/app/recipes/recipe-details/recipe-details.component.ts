@@ -3,14 +3,14 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Authority } from 'src/app/authority.model';
-import { LoginService } from 'src/app/login.service';
+import { LoginService } from 'src/app/login/login.service';
 import { CommonService } from 'src/app/shared/common.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { ShoppingListItem } from 'src/app/shopping-list/shopping-list-item.model';
 import { ShoppingListItemService } from 'src/app/shopping-list/shopping-list-item.service';
 import { User } from 'src/app/user.model';
+import { UserService } from 'src/app/user.service';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 
@@ -31,7 +31,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   isAdmin: boolean;
 
   constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router,
-    private shoppingListService: ShoppingListItemService, private loginService: LoginService, public dialog: MatDialog,
+    private shoppingListService: ShoppingListItemService, private userService: UserService, public dialog: MatDialog,
     private commonService: CommonService) { }
 
   ngOnInit() {
@@ -50,7 +50,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         console.log('Error on fetching data: ', error);
       }
     );
-    this.userSub = this.loginService.currentUser.subscribe(
+    this.userSub = this.userService.currentUser.subscribe(
       user => {
         this.currentUser = user;
         this.isAdmin = this.currentUser.isAdmin();

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from './login.service';
+import { LoginService } from './login/login.service';
 import { User } from './user.model';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { User } from './user.model';
 export class AppComponent implements OnInit{
   title = 'recipe-book';
 
-  constructor(private http: HttpClient, private loginService: LoginService){}
+  constructor(private http: HttpClient, private userService: UserService){}
 
   ngOnInit(){
     this.http.get<User>("api/user").subscribe(
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit{
                                       userResp.password,
                                       userResp.enabled,
                                       userResp.authorities);
-          this.loginService.currentUser.next(currenrUser);
+          this.userService.currentUser.next(currenrUser);
         }
       }
     );

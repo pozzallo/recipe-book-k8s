@@ -1,27 +1,31 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from './user.model';
+import { User } from '../user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  currentUser = new BehaviorSubject<User>(null);
+  // currentUser = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) { }
 
+  // logout(){
+  //   this.http.post('/logout', null).subscribe(
+  //     resp => {
+  //       this.currentUser.next(null);
+  //     },
+  //     err => {
+  //       this.currentUser.next(null);
+  //     }
+  //   )
+  // };
   logout(){
-    this.http.post('/logout', null).subscribe(
-      resp => {
-        this.currentUser.next(null);
-      },
-      err => {
-        this.currentUser.next(null);
-      }
-    )
-  };
+      return this.http.post('/logout', null) as Observable<any>;
+  }
+
 
   login(email: string, password: string){
     let headers = new HttpHeaders({authorization : 'Basic ' + btoa(email + ':' + password)});

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../login.service';
+import { LoginService } from './login.service';
 import { User } from '../user.model';
 import { MatDialogRef } from '@angular/material/dialog';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   message: string;
   error: string;
   isLogin = true;
+  isSignUp = false;
   isResetPassword = false;
   sendingEmail = false;
 
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   onSwitchMode() {
     this.error = null;
     this.isLogin = !this.isLogin;
+    this.isSignUp = !this.isSignUp;
   }
 
   onSubmit(form: NgForm) {
@@ -89,7 +91,7 @@ export class LoginComponent implements OnInit {
       } else if (err.status == '404'){
         this.error = "No such e-mail. Please enter e-mail you used for registration";
       }
-    }
+    };
     if (err['error'] && err.error['message']) {
       let message: string = err.error.message.toLowerCase();
       if (message.includes('bad credentials') || message.includes('cannot pass null or empty values to constructor')) {
@@ -98,10 +100,12 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  onResetPassword(){
+  onForgotPassword(){
     this.error = null;
     this.message = null;
     this.isResetPassword = true;
+    this.isLogin = false;
+    this.isSignUp = false;
   }
 
   onSendResetPasswordLink(email:string){
@@ -109,18 +113,15 @@ export class LoginComponent implements OnInit {
     this.loginService.sendResetPasswordToken(email).subscribe(
       resp => {
         this.sendingEmail = false;
-        console.log("Response from Send Link request: " + resp);
         this.error = null;
         this.message = "Reset password link was sent. Please check your email";
       },
       err => {
         this.sendingEmail = false;
         this.message = null;
-        console.log("Error from Send Link request: " + JSON.stringify(err));
         this.onHandleError(err);
       }
     )
-    
   }
 
 }

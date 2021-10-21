@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { LoginService } from 'src/app/login.service';
 import { User } from 'src/app/user.model';
+import { UserService } from 'src/app/user.service';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 
@@ -23,10 +23,10 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   userSub: Subscription;
 
   constructor(private route: ActivatedRoute, private recipeService: RecipeService, private router: Router,
-    private loginService: LoginService) { }
+    private userService: UserService) { }
 
   ngOnInit(): void {
-    this.userSub = this.loginService.currentUser.subscribe(user => this.currentUser = user);
+    this.userSub = this.userService.currentUser.subscribe(user => this.currentUser = user);
     this.recipeId = this.route.snapshot.paramMap.get('id');
     this.editMode = this.recipeId != null;
     if(this.editMode){

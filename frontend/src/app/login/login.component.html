@@ -1,16 +1,10 @@
-
 <div class="container">
         <div class="row" style="text-align: center;">
             <div class="col-md-12">
             <div class="col-md-11">
                 <h3>{{ message }}</h3>
                 <app-loading-spiner *ngIf="sendingEmail"></app-loading-spiner>
-                <h4 *ngIf="error && error.includes('e-mail is already in use') else elseBlock">
-                    <i style="color: red;">* {{error}} &nbsp;</i><a href="/oauth2/authorization/google">Login with Google</a>
-                </h4>
-                <ng-template #elseBlock>
-                    <h4 *ngIf="error"><i style="color: red;">* {{error}}</i></h4>
-                </ng-template>
+                <h4 *ngIf="error"><i style="color: red;">* {{error}}</i></h4>
             </div>
             <div class="col-md-1">
                     <button mat-button mat-dialog-close >
@@ -24,7 +18,7 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-md-offset-3">
                 <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-                    <div class="form-group" *ngIf="!isLogin">
+                    <div class="form-group" *ngIf="isSignUp">
                         <label for="name">Name</label>
                         <input type="text" id="name" class="form-control" name="name" ngModel required #name="ngModel">
                         <span class="help-block" *ngIf="!name.valid && name.touched">
@@ -42,7 +36,7 @@
                         </span>
                     </div>
 
-                    <div class="form-group" *ngIf="!isResetPassword">
+                    <div class="form-group" *ngIf="isLogin || isSignUp">
                         <label for="password">Password</label>
                         <input type="password" id="password" class="form-control" name="password" 
                         ngModel required minlength="1" 
@@ -53,14 +47,14 @@
                             <span *ngIf="password.errors['minlength']">Password must be at least 6 characers!</span>
                         </span>
                     </div>
-                    <div *ngIf="!isResetPassword">
+                    <div *ngIf="isLogin || isSignUp">
                         <button class="btn btn-primary" type="submit" [disabled]="!f.valid" style="margin-right: 5px;">
                             {{ isLogin ? 'Login' : 'Sign Up' }} 
                         </button>
                         <button class="btn btn-primary" type="button" (click)="onSwitchMode()">
                             Switch to  {{ isLogin ? 'Sign Up' : 'Login' }} 
                         </button> <br> <br>
-                        <a style="cursor: pointer;" (click)=onResetPassword()>Forgot your password?</a>
+                        <a style="cursor: pointer;" (click)=onForgotPassword()>Forgot your password?</a>
                     </div>
                     <button *ngIf="isResetPassword" class="btn btn-primary" type="button" [disabled]="!f.valid" style="margin-right: 5px;" (click)= onSendResetPasswordLink(f.value.email)>
                         Send link to reset password

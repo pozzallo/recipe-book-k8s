@@ -1,16 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Recipe } from './recipes/recipe.model';
+import { BehaviorSubject } from 'rxjs';
+import { User } from './user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  currentUser = new BehaviorSubject<User>(null);
 
-  baseUrl = 'api/users';
-
-  constructor(private http: HttpClient) { }
-
-
+  constructor() { }
 }
