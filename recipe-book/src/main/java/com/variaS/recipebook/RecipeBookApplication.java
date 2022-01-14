@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +15,8 @@ import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 
 @SpringBootApplication
-public class RecipeBookApplication extends WebSecurityConfigurerAdapter{
+//@EnableWebSecurity
+public class RecipeBookApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RecipeBookApplication.class, args);
@@ -31,13 +33,6 @@ public class RecipeBookApplication extends WebSecurityConfigurerAdapter{
 	    return new BCryptPasswordEncoder();
 	}
 	
-	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests(a -> a
-                .antMatchers("/api/recipes", "/api/recipes/*", "/recipes/all/**", "/api/user", 
-                			"/api/user/resetPassword", "/api/user/validateToken", "/api/user/sendResetPasswordToken").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/user").anonymous()
-                .anyRequest().authenticated());
-	}
+
 
 }

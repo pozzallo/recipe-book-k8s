@@ -17,38 +17,38 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "recipes")
 public class Recipe {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "image_url")
 	private String imageUrl;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	@Column(name = "is_pending_to_approve")
 	private boolean isPendingToApprove;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
 	private List<Ingredient> ingredients = new ArrayList<Ingredient>();
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 //	@JsonIgnore
 	private User user;
-	
+
 	public Recipe() {
 		super();
 	}
 
-	public Recipe(Integer id, String name, String imageUrl, String description,
-			List<Ingredient> ingredients, User user) {
+	public Recipe(Integer id, String name, String imageUrl, String description, List<Ingredient> ingredients,
+			User user) {
 		this.id = id;
 		this.name = name;
 		this.imageUrl = imageUrl;
@@ -58,13 +58,14 @@ public class Recipe {
 	}
 
 	public void add(Ingredient ingredient) {
-		if(ingredient != null) {
-			if(ingredients == null) {
-				ingredients = new ArrayList<Ingredient>();
-			}
-			ingredients.add(ingredient);
-			ingredient.setRecipe(this);
+		if (ingredient == null) {
+			return;
 		}
+		if (ingredients == null) {
+			ingredients = new ArrayList<Ingredient>();
+		}
+		ingredients.add(ingredient);
+		ingredient.setRecipe(this);
 	}
 
 	public List<Ingredient> getIngredients() {
@@ -109,7 +110,7 @@ public class Recipe {
 
 	@Override
 	public String toString() {
-		return "Recipe id=" + id + " Ingredients: " + ingredients ;
+		return "Recipe id=" + id + " Ingredients: " + ingredients;
 	}
 
 	public User getUser() {
@@ -127,6 +128,5 @@ public class Recipe {
 	public void setPendingToApprove(boolean isPendingToApprove) {
 		this.isPendingToApprove = isPendingToApprove;
 	}
-	
 
 }

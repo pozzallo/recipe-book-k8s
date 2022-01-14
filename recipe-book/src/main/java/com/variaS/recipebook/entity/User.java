@@ -71,8 +71,6 @@ public class User {
 		return authorities;
 	}
 
-
-
 	public int getId() {
 		return id;
 	}

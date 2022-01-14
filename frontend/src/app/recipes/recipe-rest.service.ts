@@ -34,6 +34,18 @@ export class RecipeRestService {
     return this.http.delete(`${this.baseUrl}/${id}`) as Observable<any>;
   }
 
+  addToMyRecipes(recipe: Recipe ){
+    return this.http.post(`api/user/recipes`, recipe) as Observable<Recipe>;
+  }
+
+  shareRecipe(id: string) {
+   return this.http.get(`api/recipes/${id}/share`) as Observable<any>;
+  }
+
+  approveRecipe(recipe: Recipe) {
+    return this.http.post(`api/recipes/approve`, recipe) as Observable<any>;
+  }
+
   
 
 }

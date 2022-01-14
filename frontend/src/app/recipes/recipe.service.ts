@@ -62,16 +62,29 @@ export class RecipeService {
   }
 
   addToMyRecipes(recipe: Recipe ){
-    return this.http.post(`api/user/recipes`, recipe) as Observable<Recipe>;
+    return this.recipeRestService.addToMyRecipes(recipe);
   }
 
   shareRecipe(id: string) {
-   return this.http.get(`api/recipes/${id}/share`) as Observable<any>;
+   return this.recipeRestService.shareRecipe(id);
   }
 
   approveRecipe(recipe: Recipe) {
-    return this.http.post(`api/recipes/approve`, recipe) as Observable<any>;
+    return this.recipeRestService.approveRecipe(recipe);
   }
+
+  filterRecipes(recipes: Recipe[], mode: string): Recipe[]{
+   let filteredRecipes: Recipe[] = [];
+    if(mode == 'all'){
+      filteredRecipes = recipes.filter(recipe => !recipe.user);
+    }else if (mode == 'my'){
+      filteredRecipes = recipes.filter(recipe => (recipe.user && !recipe.pendingToApprove));
+    }else if(mode == 'pending'){
+      filteredRecipes = recipes.filter(recipe => recipe.pendingToApprove);
+    }
+    return filteredRecipes;
+  }
+
 
 
 

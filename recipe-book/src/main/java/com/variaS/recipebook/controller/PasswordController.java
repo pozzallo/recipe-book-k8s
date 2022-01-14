@@ -26,7 +26,7 @@ import com.variaS.recipebook.dao.PasswordResetTokenRepository;
 import com.variaS.recipebook.dao.UserRepository;
 import com.variaS.recipebook.entity.PasswordResetToken;
 import com.variaS.recipebook.entity.User;
-import com.variaS.recipebook.service.ResetPasswordTokenService;
+import com.variaS.recipebook.service.PasswordResetTokenService;
 import com.variaS.recipebook.service.UserService;
 
 @CrossOrigin(origins = "*")
@@ -35,7 +35,7 @@ import com.variaS.recipebook.service.UserService;
 public class PasswordController {
 	
 	@Autowired
-	private ResetPasswordTokenService tokenService;
+	private PasswordResetTokenService tokenService;
 	@Autowired
 	private PasswordResetTokenRepository tokenRepo;
 	@Autowired
@@ -44,7 +44,6 @@ public class PasswordController {
 	private UserRepository userRepo;
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
 	
 	@PostMapping("/user/password")
 	public void changePassword(@RequestBody Map<String, String> newPassword) {
@@ -102,7 +101,7 @@ public class PasswordController {
 		}
 		// token valid
 		// get user from token
-		PasswordResetToken token = tokenRepo.findByToken(tokenValue).get(0);
+		PasswordResetToken token = tokenService.findTokenByValue(tokenValue);
 		User user = token.getUser();
 		
 		// change password for user

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.variaS.recipebook.dao.AuthorityRepository;
 import com.variaS.recipebook.dao.IngredientRepository;
-import com.variaS.recipebook.dao.PasswordResetTokenRepository;
 import com.variaS.recipebook.dao.RecipeRepository;
 import com.variaS.recipebook.dao.UserRepository;
 import com.variaS.recipebook.entity.Authority;

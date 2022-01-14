@@ -13,13 +13,14 @@ import com.variaS.recipebook.dao.IngredientRepository;
 import com.variaS.recipebook.dao.RecipeRepository;
 import com.variaS.recipebook.entity.Ingredient;
 import com.variaS.recipebook.entity.Recipe;
+import com.variaS.recipebook.entity.User;
 
 @Service
-public class RecipeServiceImp implements RecipeService{
-	@Autowired 
+public class RecipeServiceImp implements RecipeService {
+	@Autowired
 	private RecipeRepository recipeRepository;
-	
-	@Autowired 
+
+	@Autowired
 	private IngredientRepository ingredientRepository;
 
 	@Override
@@ -28,7 +29,7 @@ public class RecipeServiceImp implements RecipeService{
 		List<Recipe> recipes = recipeRepository.findByUserId(id);
 		return recipes;
 	}
-	
+
 	@Override
 	public Optional<Recipe> getRecipe(int id) {
 		Optional<Recipe> optRecipe = recipeRepository.findById(id);
@@ -38,7 +39,7 @@ public class RecipeServiceImp implements RecipeService{
 	@Override
 	@Transactional
 	public Recipe saveRecipe(Recipe recipe) {
-		List<Ingredient> ingredients = recipe.getIngredients();
+		List<Ingredient> ingredients = recipe.getIngredients(); 
 		ingredients.forEach(ingr -> ingr.setRecipe(recipe));
 		return recipeRepository.save(recipe);
 	}
@@ -46,7 +47,7 @@ public class RecipeServiceImp implements RecipeService{
 	@Override
 	@Transactional
 	public void saveRecipes(List<Recipe> recipes) {
-		recipeRepository.saveAll(recipes);	
+		recipeRepository.saveAll(recipes);
 	}
 
 	@Override
@@ -56,14 +57,16 @@ public class RecipeServiceImp implements RecipeService{
 		recipe.setDescription(newRecipe.getDescription());
 		recipe.setName(newRecipe.getName());
 		recipe.setImageUrl(newRecipe.getImageUrl());
-		
+
 		List<Ingredient> ingredients = ingredientRepository.findByRecipeId(id);
 		ingredientRepository.deleteAll(ingredients);
-		
-		newRecipe.getIngredients().forEach(ingredient -> recipe.add(ingredient));
-		
+
+		newRecipe.getIngredients()
+//			.stream()
+//			.filter(ingredirnt -> ingredirnt != null)
+			.forEach(ingredient -> recipe.add(ingredient)); 
+
 		return recipeRepository.save(recipe);
-		
 	}
 
 	@Override
@@ -75,19 +78,16 @@ public class RecipeServiceImp implements RecipeService{
 	@Transactional
 	public void shareRecipe(int id) {
 		Recipe sharedRecipe = recipeRepository.findById(id).get();
-		// copy from user recipe to common recipe, set user = null and mark as pending to approve
-		Recipe tempRecipe = new Recipe(null, 
-				  sharedRecipe.getName(),
-				  sharedRecipe.getImageUrl(),
-				  sharedRecipe.getDescription(),
-				  null,
-				  null);
+		// copy from user recipe to common recipe, set user = null and mark as pending
+		// to approve
+		Recipe tempRecipe = new Recipe(null, sharedRecipe.getName(), sharedRecipe.getImageUrl(),
+				sharedRecipe.getDescription(), null, null);
 		tempRecipe.setPendingToApprove(true);
 		Recipe newRecipe = recipeRepository.save(tempRecipe);
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();
-		
+
 		sharedRecipe.getIngredients().forEach(ingredient -> {
-			ingredients.add(new Ingredient(null, ingredient.getName() ,ingredient.getAmount(), newRecipe));
+			ingredients.add(new Ingredient(null, ingredient.getName(), ingredient.getAmount(), newRecipe));
 		});
 		newRecipe.setIngredients(ingredients);
 		recipeRepository.save(newRecipe);
@@ -98,8 +98,14 @@ public class RecipeServiceImp implements RecipeService{
 		recipe.setPendingToApprove(false);
 		recipeRepository.save(recipe);
 	}
-	
-	
 
+	@Override
+	public List<Recipe> getUserRecipes(User user) {
+		List<Recipe> result = null;
+		if (user != null) {
+			result = recipeRepository.findByUserId(user.getId());
+		}
+		return result;
+	}
 
 }

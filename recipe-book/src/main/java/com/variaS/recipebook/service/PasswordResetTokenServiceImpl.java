@@ -12,7 +12,7 @@ import com.variaS.recipebook.dao.PasswordResetTokenRepository;
 import com.variaS.recipebook.entity.PasswordResetToken;
 import com.variaS.recipebook.entity.User;
 @Service
-public class ResetPasswordTokenServiceImpl implements ResetPasswordTokenService{
+public class PasswordResetTokenServiceImpl implements PasswordResetTokenService{
 	
 	@Autowired
 	private PasswordResetTokenRepository passwordResetTokenRepo;
@@ -52,6 +52,16 @@ public class ResetPasswordTokenServiceImpl implements ResetPasswordTokenService{
 	private boolean isTokenExpired(PasswordResetToken passToken) {
 	    final Calendar cal = Calendar.getInstance();
 	    return passToken.getExpiryDate().before(cal.getTime());
+	}
+
+	@Override
+	public PasswordResetToken findTokenByValue(String value) {
+		PasswordResetToken findedToken = null;
+		List<PasswordResetToken> findByToken = passwordResetTokenRepo.findByToken(value);
+		if(!findByToken.isEmpty()) {
+			findedToken = findByToken.get(0);
+		}
+		return findedToken;
 	}
 
 }

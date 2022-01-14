@@ -17,6 +17,7 @@ export class AppComponent implements OnInit{
   ngOnInit(){
     this.http.get<User>("api/user").subscribe(
       (userResp: User) => {
+        console.log(JSON.stringify(userResp));
         if(userResp){
           let currenrUser = new User(userResp.id,
                                       userResp.name,

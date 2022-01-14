@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { RecipeRestService } from 'src/app/recipes/recipe-rest.service';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 
@@ -29,24 +28,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         return this.recipeService.getRecipes();
       })
     ).subscribe((recipes: Recipe[]) => {
-      if(this.mode == 'all'){
-        this.recipes = recipes.filter(recipe => (!recipe.user && !recipe.pendingToApprove));
-      }else if (this.mode == 'my'){
-        this.recipes = recipes.filter(recipe => (recipe.user && !recipe.pendingToApprove));
-      }else if(this.mode == 'pending'){
-        this.recipes = recipes.filter(recipe => recipe.pendingToApprove);
-      }
-    })
+      this.recipes = this.recipeService.filterRecipes(recipes, this.mode)
+    });
 
     this.recipesChangedSub = this.recipeService.recipesChanged.subscribe(
       recipes => {
-        if(this.mode == 'all'){
-          this.recipes = recipes.filter(recipe => !recipe.user);
-        }else if (this.mode == 'my'){
-          this.recipes = recipes.filter(recipe => (recipe.user && !recipe.pendingToApprove));
-        }else if(this.mode == 'pending'){
-          this.recipes = recipes.filter(recipe => recipe.pendingToApprove);
-        }
+       this.recipes = this.recipeService.filterRecipes(recipes, this.mode)
       }
     );
   }
@@ -58,6 +45,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.recipesChangedSub.unsubscribe();
   }
+
+
 
 
 }
